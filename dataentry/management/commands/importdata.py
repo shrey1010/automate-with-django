@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 # from dataentry.models import Student
 from django.apps import apps
 import csv
+from django.db import DataError
 
 
 class Command(BaseCommand):
@@ -24,10 +25,17 @@ class Command(BaseCommand):
                 continue # model not found in first app keep searching in next app
             
         if not model:
-            raise CommandError(f" Model {model_name} not found in any app!")
+            raise CommandError(f"Model {model_name} not found in any app!")
+        
+        model_fields = [field.name for field in model._meta.fields if field.name != 'id']
         
         with open(file_path, "r") as f:
             reader = csv.DictReader(f)
+            csv_header = reader.fieldnames
+            
+            if csv_header!= model_fields:
+                raise DataError(f"CSV file Doesn't match with the {model_name} table fields")
+            
             for row in reader:
                 model.objects.create(
                     **row
