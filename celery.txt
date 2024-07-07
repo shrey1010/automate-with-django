@@ -4,7 +4,10 @@ to run redis : redis-server
 check redis working : redis-cli 
                      ping ->pong
 
+
 celery -A awd_main worker --loglevel=info
+if got error ::
+celery -A awd_main worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo
 
 
 task : unit of work need to execute asynchronusly by a celery worker 

@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect
-from .utils import get_all_custom_models
+from .utils import check_csv_error, get_all_custom_models
 from uploads.models import Upload
 from django.conf import settings
-from django.core.management import call_command
 from django.contrib import messages
+from .tasks import import_data_task
 # Create your views here.
 
 def import_data(request):
@@ -15,12 +15,16 @@ def import_data(request):
         relative_path = str(upload.file.url)
         file_path = str(settings.BASE_DIR) + relative_path
         
+        #handle errors before assigning task to workers 
         try:
-            call_command('importdata', file_path, model_name)
-            messages.success(request, "Data Imported Successfully!")
+            check_csv_error(file_path, model_name)
         except Exception as e:
-            messages.error(request, str(e ))
+            messages.error(request, str(e))
+            return redirect('import_data')
         
+        # create a celery worker for task 
+        import_data_task.delay(file_path, model_name)
+        messages.success(request, 'your data is being imported, you will be notified once it is done.')
         return redirect('import_data')
         
     else:
