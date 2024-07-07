@@ -2,6 +2,8 @@ from django.apps import apps
 from django.core.management.base import BaseCommand, CommandError
 import csv 
 from django.db import DataError
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 def get_all_custom_models():
     
@@ -40,3 +42,9 @@ def check_csv_error(file_path, model_name):
         raise e 
         
     return model
+
+def send_email(mail_subject, mail_message , to_email):
+    from_email = settings.DEFAULT_FROM_EMAIL
+    mail= EmailMessage(mail_subject, mail_message, from_email,to=[to_email])
+    mail.send()
+    

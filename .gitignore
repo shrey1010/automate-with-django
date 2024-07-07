@@ -133,6 +133,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+myenv/
 ENV/
 env.bak/
 venv.bak/
@@ -154,6 +155,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/static
 
 # pytype static type analyzer
 .pytype/
