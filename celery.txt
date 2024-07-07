@@ -1,0 +1,27 @@
+redis : https://github.com/tporadowski/redis/releases
+to run redis : redis-server 
+
+check redis working : redis-cli 
+                     ping ->pong
+
+celery -A awd_main worker --loglevel=info
+
+
+task : unit of work need to execute asynchronusly by a celery worker 
+celery workers : a seprate process which execute task  (pick task  complete that in background and execute asynchronously in background and save results in redis in result backend )
+message brokers : communication system which communicate between diffrent server 
+celery beat :  a scheduler to run task at set time like cron jobs 
+
+
+
+                          Task Request (Django APP)  <------------------------------------------
+                                     |                                                         |
+                                     V                                                         |
+worker A
+worker B     ----->           Redis(task queue)             ------------->                    Redis
+worker C                       messege Broker               Execution of                  Result Backend
+                                                           task by worker
+
+create a task.py and run celery celery -A tasks worker --loglevel=info
+check port : netstat -a -n -o | findstr :6379
+kill port (run as adminstrator) : taskkill /PID 5252 /F
