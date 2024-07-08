@@ -3,6 +3,7 @@ import csv
 # from dataentry.models import Student
 from django.apps import apps
 import datetime 
+from dataentry.utils import genrate_csv_file
 
 class Command(BaseCommand):
     help = "Export Data from Database into a CSV"
@@ -27,8 +28,7 @@ class Command(BaseCommand):
             return
                 
         data_object = model.objects.all()
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        file_path = f'{model_name}_{timestamp}.csv'
+        file_path = genrate_csv_file(model_name)
         
         with open(file_path, "w", newline='') as f:
             writer = csv.writer(f)
