@@ -24,6 +24,7 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("dataentry/",include('dataentry.urls')),
+    path("emails/",include('emails.urls')),
     path("",views.home,name="home"),
     path("celery-test/",views.celery_test),
     
