@@ -47,7 +47,9 @@ def check_csv_error(file_path, model_name):
 
 def send_email(mail_subject, mail_message , to_email, attachment = None):
     from_email = settings.DEFAULT_FROM_EMAIL
-    mail= EmailMessage(mail_subject, mail_message, from_email,to=[to_email])
+    if isinstance(to_email, str):
+        to_email = [to_email]
+    mail= EmailMessage(mail_subject, mail_message, from_email,to=to_email)
     if attachment is not None:
         mail.attach_file(attachment)
     mail.send()
