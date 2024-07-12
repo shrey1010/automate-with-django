@@ -52,6 +52,7 @@ def send_email(mail_subject, mail_message , to_email, attachment = None):
     mail= EmailMessage(mail_subject, mail_message, from_email,to=to_email)
     if attachment is not None:
         mail.attach_file(attachment)
+    mail.content_subtype = "html"
     mail.send()
     
     
