@@ -3,6 +3,7 @@ from .forms import EmailForm
 from django.contrib import messages
 from dataentry import utils
 from .models import Subscriber
+from .tasks import send_email_task
 
 
 # Create your views here.
@@ -24,7 +25,9 @@ def send_email(request):
             attachment = None
             if email_form.attachment:
                 attachment = email_form.attachment.path
-            utils.send_email(mail_subject, message, to_email,attachment)
+                
+            #handover task to celery
+            send_email_task.delay(mail_subject, message, to_email,attachment)
             
             messages.success(request, "Email Sent Successfully!")
             return redirect("send_email")
