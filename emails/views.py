@@ -1,8 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import EmailForm
 from django.contrib import messages
 from dataentry import utils
-from .models import Subscriber
+from .models import Subscriber,Email,EmailTracking
 from .tasks import send_email_task
 
 
@@ -44,3 +44,23 @@ def send_email(request):
             "email_form":email_form
         }
         return render(request, "emails/send_email.html" , context)
+    
+def track_click(request):
+    return 
+
+def track_open(request):
+    return 
+
+def track_dashboard(request):
+    emails = Email.objects.all()
+    context = {
+        "emails":emails
+    }
+    return render(request, "emails/track_dashboard.html", context)
+
+def track_stats(request, pk):
+    email = get_object_or_404(Email,pk=pk) 
+    context = {
+        'email':email
+    }
+    return render(request, "emails/track_stats.html", context)
