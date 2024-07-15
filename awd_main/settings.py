@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-*0woozn0yt9u3xm%*!ns#*6%fx(90)9psxwf+d=*q)2wd3s9(a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -166,3 +166,6 @@ CKEDITOR_CONFIGS = {
         'height': 200,
     },
 }
+
+CSRF_TRUSTED_ORIGINS = ['https://60aa-103-92-43-46.ngrok-free.app']
+BASE_URL = 'https://60aa-103-92-43-46.ngrok-free.app'

@@ -28,3 +28,9 @@ worker C                       messege Broker               Execution of        
 create a task.py and run celery celery -A tasks worker --loglevel=info
 check port : netstat -a -n -o | findstr :6379
 kill port (run as adminstrator) : taskkill /PID 5252 /F
+
+# for ngrok to run 
+go to directory where ngrok.exe is stored and set  authtoken 
+PS C:\Users\shrey\Downloads> ./ngrok config add-authtoken <token>   # found in env  (optional command)
+./ngrok http http://localhost:8080
+

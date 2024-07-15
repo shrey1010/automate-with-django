@@ -6,6 +6,10 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 import datetime
 import os 
+from emails.models import Email,Sent
+from emails.models import EmailTracking,Subscriber
+import hashlib
+import time
 
 def get_all_custom_models():
     
@@ -45,15 +49,46 @@ def check_csv_error(file_path, model_name):
         
     return model
 
-def send_email(mail_subject, mail_message , to_email, attachment = None):
-    from_email = settings.DEFAULT_FROM_EMAIL
-    if isinstance(to_email, str):
-        to_email = [to_email]
-    mail= EmailMessage(mail_subject, mail_message, from_email,to=to_email)
-    if attachment is not None:
-        mail.attach_file(attachment)
-    mail.content_subtype = "html"
-    mail.send()
+def send_email(mail_subject, mail_message , to_email, attachment = None, email_id = None):
+    try:
+        from_email = settings.DEFAULT_FROM_EMAIL
+        if isinstance(to_email, str):
+            to_email = [to_email]
+        
+        for recipient_email in to_email:
+            # create email tracking record
+            if email_id: 
+                email = Email.objects.get(pk=email_id)
+                subscriber = Subscriber.objects.get(email_list = email.email_list, email_address = recipient_email) 
+                timestamp = str(time.time())
+                data_to_hash = f"{recipient_email}{timestamp}"
+                unique_id = hashlib.sha256(data_to_hash.encode()).hexdigest()
+                email_tracking = EmailTracking.objects.create(
+                email = email,
+                subscriber = subscriber,
+                unique_id = unique_id,
+             )
+            # genrate tracking pixel
+            base_url = settings.BASE_URL
+            click_tracking_url = f"{base_url}/emails/track/click/{unique_id}"
+            #search for  link in email body
+            # if link found in body will inject unique id in that
+        mail= EmailMessage(mail_subject, mail_message, from_email,to=to_email)
+        if attachment is not None:
+            mail.attach_file(attachment)
+        mail.content_subtype = "html"
+        mail.send()
+        
+        if email_id is not None:
+            email = Email.objects.get(pk=email_id)
+            sent = Sent.objects.create(
+                email = email,
+                total_sent = email.email_list.count_emails()
+            )
+    
+    except Exception as e:
+        raise e
+    
     
     
 def genrate_csv_file(model_name):
