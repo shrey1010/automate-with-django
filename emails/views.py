@@ -74,7 +74,7 @@ def track_open(request,unique_id):
         return HttpResponse("Email Tracking Record not found!")
 
 def track_dashboard(request):
-    emails = Email.objects.all().annotate(total_sent=Sum('sent__total_sent'))
+    emails = Email.objects.all().annotate(total_sent=Sum('sent__total_sent')).order_by('-sent_at')
     context = {
         "emails":emails
     }
