@@ -29,6 +29,18 @@ class Email(models.Model):
     def __str__(self):
         return self.subject
     
+    def open_rate(self):
+        total_sent = self.email_list.count_emails()
+        opened_count = EmailTracking.objects.filter(email=self, opened_at__isnull=False).count()
+        open_rate = (opened_count/total_sent)*100 if total_sent > 0 else 0
+        return round(open_rate,2)
+    
+    def click_rate(self):
+        total_sent = self.email_list.count_emails()
+        clicked_count = EmailTracking.objects.filter(email=self, clicked_at__isnull=False).count()
+        click_rate = (clicked_count/total_sent)*100 if total_sent > 0 else 0
+        return round(click_rate,2)
+    
 class EmailTracking(models.Model):
     email = models.ForeignKey(Email,on_delete=models.CASCADE,null =True , blank = True)
     subscriber = models.ForeignKey(Subscriber,on_delete=models.CASCADE, null=True , blank = True)
@@ -37,7 +49,7 @@ class EmailTracking(models.Model):
     clicked_at = models.DateTimeField(null=True,blank=True)
     
     def __str__(self):
-        return self.email
+        return str(self.email)
     
 class Sent(models.Model):
     email = models.ForeignKey(Email,models.CASCADE,null = True,blank=True)
