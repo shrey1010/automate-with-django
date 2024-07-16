@@ -167,5 +167,5 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://60aa-103-92-43-46.ngrok-free.app']
-BASE_URL = 'https://60aa-103-92-43-46.ngrok-free.app'
+CSRF_TRUSTED_ORIGINS = ['https://9a84-103-214-60-56.ngrok-free.app']
+BASE_URL = 'https://9a84-103-214-60-56.ngrok-free.app'
