@@ -26,6 +26,7 @@ urlpatterns = [
     path("dataentry/",include('dataentry.urls')),
     path("emails/",include('emails.urls')),
     path("",views.home,name="home"),
+    path("image-compression/",include('image_compression.urls')),
     path("celery-test/",views.celery_test),
     
     path('register/',views.register_view,name="register"),
