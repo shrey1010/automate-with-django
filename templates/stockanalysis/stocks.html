@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="text-center">Stock Market Analysis</h2>
+    <form action="{% url 'stocks' %}" method="POST">
+    {% csrf_token %}
+        <div class="form-group">
+                        
+            {{form | crispy}}
+
+        </div>
+        <div class="form-group">
+
+            <input type="Submit" value="Get Info" class="btn btn-success">
+        </div>
+    </form>
+    {% include 'alerts.html' %}
+</div>
+
+{% endblock %}

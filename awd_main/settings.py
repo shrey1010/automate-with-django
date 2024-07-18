@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "emails",
     "ckeditor",
     "image_compression",
+    "stockanalysis",
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,5 @@ CKEDITOR_CONFIGS = {
 
 CSRF_TRUSTED_ORIGINS = ['https://9a84-103-214-60-56.ngrok-free.app']
 BASE_URL = 'https://9a84-103-214-60-56.ngrok-free.app'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 3000
