@@ -4,6 +4,12 @@
 
 {% load crispy_forms_tags %}
 
+<style>
+    .select2-container .select2-selection--single{
+        height: 40px !important;
+    }
+</style>
+
 <div class="container mt-5" style="max-width: 600px;">
     <h2 class="text-center">Stock Market Analysis</h2>
     <form action="{% url 'stocks' %}" method="POST">
@@ -19,6 +25,8 @@
         </div>
     </form>
     {% include 'alerts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {{ form.media }}
 </div>
 
 {% endblock %}
