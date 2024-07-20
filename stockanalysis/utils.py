@@ -3,6 +3,7 @@ import requests
 from requests.exceptions import RequestException, ConnectionError
 
 def scrap_stock_data(symbol, exchange):
+    stock_response = None
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
@@ -13,14 +14,14 @@ def scrap_stock_data(symbol, exchange):
         url = f"https://finance.yahoo.com/quote/{symbol}/"
     else:
         print("Stock Exchange not supported.")
-        return
+        return stock_response
 
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx or 5xx)
     except (RequestException, ConnectionError) as e:
         print(f"Failed to retrieve data for {symbol}. Error: {e}")
-        return
+        return stock_response
 
     soup = BeautifulSoup(response.content, 'html.parser')
 

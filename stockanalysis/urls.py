@@ -5,4 +5,5 @@ urlpatterns = [
     path("stocks/",views.stocks , name="stocks"),
     
     path("stock-autocomplete/",views.StockAutocomplete.as_view(),name="stock_autocomplete"),
+    path("stock-detail/<int:stock_id>/", views.stock_detail, name = 'stock_detail')
 ]

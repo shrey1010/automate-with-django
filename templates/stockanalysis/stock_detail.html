@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container mt-5 p-3 shadow rounded" style="max-width: 600px;">
+    <h3>{{ stock_data.stock }} ({{ stock_data.stock.symbol }})</h3>
+    <h4 style="font-weight: 600;">
+        {% if stock_data.stock.exchange == "NASDAQ" %} ${{ stock_data.current_price }}
+        {% elif stock_data.stock.exchange == "National Stock Exchange" %} ₹{{ stock_data.current_price }}
+        {% endif %}
+        <span class="{% if '-' in stock_data.price_changed %} text-danger {% else %} text-success  {% endif %} " style="font-size: 15px; font-weight: 400;">
+            {% if '-' in stock_data.price_changed %} 
+                {{stock_data.price_changed|floatformat:2 }} 
+            {% else %} 
+                +{{stock_data.price_changed|floatformat:2 }}  
+            {% endif %}
+        </span>
+        <span class="{% if '-' in stock_data.percentage_changed %} text-danger {% else %} text-success  {% endif %} " style="font-size: 15px; font-weight: 400;">
+            {% if '-' in stock_data.percentage_changed %} 
+                ({{stock_data.percentage_changed|floatformat:2 }}%) 
+            {% else %} 
+                (+{{stock_data.percentage_changed|floatformat:2 }}%)  
+            {% endif %}
+            
+        </span> &nbsp;
+        <span style="font-size: 16px; text-transform: uppercase;">
+            {% if stock_data.stock.sector %}
+                {{stock_data.stock.sector }}
+            {% endif %}
+        </span>
+    </h4>
+    <small>{{ stock_data.stock.exchange }} - {{stock_data.stock.country}} </small>
+    <table class="table table-hover" style="margin: auto; max-width: 600px; border-width: 20px;">
+        <tbody>
+            <tr>
+                <td>Previous Close:</td>
+                <td>{{ stock_data.previous_close }}</td>
+            </tr>
+            <tr>
+                <td>52 Week High:</td>
+                <td>{{ stock_data.week_52_high }}</td>
+            </tr>
+            <tr>
+                <td>52 Week Low:</td>
+                <td>{{ stock_data.week_52_low }}</td>
+            </tr>
+            <tr>
+                <td>Market Cap:</td>
+                <td>{{ stock_data.market_cap }}</td>
+            </tr>
+            <tr>
+                <td>PE Ratio:</td>
+                <td>{{ stock_data.pe_ratio }}</td>
+            </tr>
+            <tr>
+                <td>Avg Volume :</td>
+                <td>{{ stock_data.avg_volume }}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'stocks' %}" class=" btn btn-info">Check Another Stock</a>
+
+    {% include 'alerts.html' %}
+ </div>
+
+{% endblock %}
